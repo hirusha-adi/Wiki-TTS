@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 const ChangeMode = ({ useUrl, setUseUrl }) => {
   return (
     <>
-      <div className="flex justify-between items-center mx-10">
+      <div className="text-center text-md">Change text mode:</div>
+      <div className="flex justify-between items-center mx-10 mt-2">
         <div className="form-control">
           <label className="label cursor-pointer">
             <input
