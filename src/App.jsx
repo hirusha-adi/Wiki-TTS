@@ -5,7 +5,11 @@ import { FromUrl } from "./components/FromUrl";
 
 function App() {
   const [useUrl, setUseUrl] = useState(true);
+
+  // for looking up with URLs
   const [lookupUrl, setLookupUrl] = useState("");
+  const [apiResponse, setApiResponse] = useState("");
+  const [apiResponseSuccess, setApiResponseSuccess] = useState(false);
 
   return (
     <>
@@ -17,7 +21,12 @@ function App() {
 
           <div className="mt-6">
             {useUrl ? (
-              <FromUrl lookupUrl={lookupUrl} setLookupUrl={setLookupUrl} />
+              <FromUrl
+                lookupUrl={lookupUrl}
+                setLookupUrl={setLookupUrl}
+                setApiResponse={setApiResponse}
+                setApiResponseSuccess={setApiResponseSuccess}
+              />
             ) : (
               <>
                 <textarea

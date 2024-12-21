@@ -1,16 +1,46 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-const FromUrl = ({ lookupUrl, setLookupUrl }) => {
+const FromUrl = ({ setLookupUrl, setApiResponse }) => {
   const [inputValue, setInputValue] = useState("");
+
+  // for fetching
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSetLookupUrl = () => {
     setLookupUrl(inputValue);
+    fetchData(inputValue);
+  };
+
+  const fetchData = async (url) => {
+    setIsLoading(true);
+    setError(null);
+    setApiResponse("");
+
+    try {
+      const response = await fetch(
+        `http://fivefilters.hirusha.xyz/extract.php?images=0&url=${encodeURIComponent(
+          url
+        )}`
+      );
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const data = await response.text();
+      setApiResponse(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleClearLookupUrl = () => {
     setInputValue("");
     setLookupUrl("");
+    setApiResponse("");
+    setError(null);
   };
 
   return (
@@ -39,7 +69,8 @@ const FromUrl = ({ lookupUrl, setLookupUrl }) => {
             </button>
           </div>
         </div>
-        {lookupUrl}
+        {isLoading && <div>Loading...</div>}
+        {error && <div>Error: {error}</div>}
       </div>
     </>
   );
@@ -48,6 +79,7 @@ const FromUrl = ({ lookupUrl, setLookupUrl }) => {
 FromUrl.propTypes = {
   lookupUrl: PropTypes.string.isRequired,
   setLookupUrl: PropTypes.func.isRequired,
+  setApiResponse: PropTypes.func.isRequired,
 };
 
 export { FromUrl };
